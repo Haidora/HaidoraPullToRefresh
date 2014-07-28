@@ -438,6 +438,24 @@ const CGFloat HABRefreshViewHeight = 60.0;
     self.subTitleLable.frame = CGRectMake(lastUpdateX, lastUpdateY, lastUpdateWidth, lastUpdateHeight);
 }
 
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    if (self.superview && newSuperview == nil)
+    {
+        //use self.superview, not self.scrollView. Why self.scrollView == nil here?
+        UIScrollView *scrollView = (UIScrollView *)self.superview;
+        if (scrollView.showsPullToRefresh)
+        {
+            if (self.isObserving)
+            {
+                //If enter this branch, it is the moment just before "SVPullToRefreshView's dealloc", so remove observer here
+                [scrollView removeObserver:self forKeyPath:@"contentOffset"];
+                self.isObserving = NO;
+            }
+        }
+    }
+}
+
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (!self.userInteractionEnabled || self.hidden)
@@ -615,6 +633,25 @@ const CGFloat HABRefreshViewHeight = 60.0;
 {
     [super layoutSubviews];
     self.titleLable.frame = self.bounds;
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    if (self.superview && newSuperview == nil)
+    {
+        //use self.superview, not self.scrollView. Why self.scrollView == nil here?
+        UIScrollView *scrollView = (UIScrollView *)self.superview;
+        if (scrollView.showsPullToRefresh)
+        {
+            if (self.isObserving)
+            {
+                //If enter this branch, it is the moment just before "SVPullToRefreshView's dealloc", so remove observer here
+                [scrollView removeObserver:self forKeyPath:@"contentSize"];
+                [scrollView removeObserver:self forKeyPath:@"contentOffset"];
+                self.isObserving = NO;
+            }
+        }
+    }
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
