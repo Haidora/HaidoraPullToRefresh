@@ -360,20 +360,14 @@ const CGFloat HABRefreshViewHeight = 60.0;
 
 -(void)beginRefreshing
 {
-    if (self.window)
-    {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.state = HABRefreshStateRefreshing;
-    }
-    else
-    {
-        _state = HABRefreshStateRefreshing;
-        [super setNeedsDisplay];
-    }
+    });
 }
 
 -(void)endRefreshing
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.state = HABRefreshStateNormal;
     });
 }
@@ -561,6 +555,7 @@ const CGFloat HABRefreshViewHeight = 60.0;
     self.titleLable.text = self.titleDic[@(state)];
     switch (state)
     {
+        case HABRefreshStateAll:
         case HABRefreshStateNormal:
         {
             if (HABRefreshStateRefreshing == oldState)
@@ -717,6 +712,7 @@ const CGFloat HABRefreshViewHeight = 60.0;
     self.titleLable.text = self.titleDic[@(state)];
 	switch (state)
     {
+        case HABRefreshStateAll:
 		case HABRefreshStateNormal:
         {
             if (HABRefreshStateRefreshing == oldState)

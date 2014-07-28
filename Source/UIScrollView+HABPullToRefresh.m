@@ -135,12 +135,10 @@
 
 - (void)triggerPullToRefresh
 {
-    self.pullToRefreshView.state = HABRefreshStatePulling;
     [self.pullToRefreshView beginRefreshing];
 }
 - (void)triggerInfiniteScrolling
 {
-    self.infiniteScrollingView.state = HABRefreshStatePulling;
     [self.infiniteScrollingView beginRefreshing];
 }
 
