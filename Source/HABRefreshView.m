@@ -629,7 +629,7 @@ const CGFloat HABRefreshViewHeight = 60.0;
     }
     if ([keyPath isEqualToString:@"contentSize"])
     {
-        [self adjustStateWithContentOffset];
+        [self adjustFrameWithContentSize];
     }
     else if([keyPath isEqualToString:@"contentOffset"])
     {
